@@ -5,3 +5,4 @@ sqlalchemy
 asyncpg
 alembic
 python-dotenv
+greenlet
