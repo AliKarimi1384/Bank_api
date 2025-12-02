@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, func
-from typing import List
+from sqlalchemy import select, desc, func, and_
+from typing import List, Optional
 
 from app.core.database import get_db
 from app.schemas.api_schemas import TransferRequest, TransactionResponse, WithdrawRequest
 from app.services.transfer_service import process_transfer
 from app.models.domain import Transaction, Card, Account, TransactionType, TransactionStatus
 from app.core.config import settings
+from datetime import datetime
 
 router = APIRouter()
 
@@ -105,13 +106,38 @@ async def get_card_history(
 
 @router.get("/fees-report")
 async def get_total_fees(
-    start_date: str = None,
-    end_date: str = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    transaction_id: Optional[int] = None,
     db: AsyncSession = Depends(get_db)
 ):
     query = select(func.sum(Transaction.fee_amount))
+    filters = []
+
+    def parse_date(date_str: str):
+        if date_str and len(date_str) > 6 and date_str[-6] == ' ':
+            date_str = date_str[:-6] + '+' + date_str[-5:]
+        return datetime.fromisoformat(date_str)
+
+    if transaction_id:
+        filters.append(Transaction.id == transaction_id)
+
+    if start_date:
+        filters.append(Transaction.created_at >= parse_date(start_date))
+    if end_date:
+        filters.append(Transaction.created_at <= parse_date(end_date))
+
+    if filters:
+        query = query.where(and_(*filters))
 
     result = await db.execute(query)
     total_fees = result.scalar() or 0
 
-    return {"total_fee_income": total_fees}
+    return {
+        "total_fee_income": total_fees,
+        "filters": {
+            "transaction_id": transaction_id,
+            "start_date": start_date,
+            "end_date": end_date
+        }
+    }
