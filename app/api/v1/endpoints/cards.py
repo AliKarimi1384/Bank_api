@@ -9,7 +9,7 @@ from app.schemas.api_schemas import CardResponse
 
 router = APIRouter()
 
-#cards data
+# cards data
 @router.get("/my-cards", response_model=List[CardResponse])
 async def get_my_cards(user_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
@@ -20,7 +20,10 @@ async def get_my_cards(user_id: int, db: AsyncSession = Depends(get_db)):
     cards = result.scalars().all()
 
     if not cards:
-        raise HTTPException(status_code=404, detail="کاربری با این مشخصات یافت نشد یا کارتی ندارد")
+        raise HTTPException(
+            status_code=404,
+            detail="No user was found with these details, or the user has no cards."
+        )
 
     response_data = []
     for card in cards:

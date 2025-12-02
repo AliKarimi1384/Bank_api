@@ -16,7 +16,7 @@ async def get_api_key(api_key_header: str = Security(api_key_header)):
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    description="سیستم بانکی",
+    description="Bank API",
     version="1.0.0"
 )
 

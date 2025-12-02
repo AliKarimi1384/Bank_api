@@ -58,8 +58,11 @@ async def withdraw_money(
         total_amount=request.amount,
         type=TransactionType.WITHDRAW.value,
         status=TransactionStatus.SUCCESS.value,
-        ref_number=f"WD-{func.now()}",
-        description="Cash withdrawal"
+        
+        ref_number=f"WD-{int(datetime.now().timestamp() * 1000000)}", 
+        
+        description="withdraw money",
+        created_at=datetime.now() 
     )
     db.add(new_tx)
     await db.commit()

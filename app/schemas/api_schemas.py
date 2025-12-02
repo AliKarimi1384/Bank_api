@@ -34,9 +34,13 @@ class TransferRequest(BaseModel):
     @validator("amount")
     def validate_amount(cls, v):
         if v < settings.MIN_TRANSACTION_AMOUNT:
-            raise ValueError(f"حداقل مبلغ تراکنش {settings.MIN_TRANSACTION_AMOUNT} تومان است")
+            raise ValueError(
+                f"Minimum transaction amount is {settings.MIN_TRANSACTION_AMOUNT} tomans"
+            )
         if v > settings.MAX_TRANSACTION_AMOUNT:
-            raise ValueError(f"حداکثر مبلغ تراکنش {settings.MAX_TRANSACTION_AMOUNT} تومان است")
+            raise ValueError(
+                f"Maximum transaction amount is {settings.MAX_TRANSACTION_AMOUNT} tomans"
+            )
         return v
 
 
@@ -48,5 +52,5 @@ class WithdrawRequest(BaseModel):
     @validator("amount")
     def validate_amount(cls, v):
         if v < settings.MIN_TRANSACTION_AMOUNT:
-            raise ValueError("مبلغ کمتر از حد مجاز است")
+            raise ValueError("Amount is below the allowed minimum")
         return v
