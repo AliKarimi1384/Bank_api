@@ -12,6 +12,7 @@ from app.models.domain import (
     EntityStatus,
 )
 from app.core.security import get_password_hash
+from datetime import datetime, timedelta
 
 NUM_USERS = 10
 NUM_TRANSACTIONS = 100_000
@@ -96,7 +97,7 @@ async def seed_data():
                 type=TransactionType.CARD_TO_CARD.value,
                 status=TransactionStatus.SUCCESS.value,
                 ref_number=str(random.randint(100000000000, 999999999999)),
-                created_at=None,
+                created_at=datetime.now() - timedelta(days=10)
             )
             transactions_batch.append(tx)
 
