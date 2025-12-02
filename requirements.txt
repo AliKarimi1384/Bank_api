@@ -6,3 +6,5 @@ asyncpg
 alembic
 python-dotenv
 greenlet
+passlib
+bcrypt==3.2.0

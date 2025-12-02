@@ -11,21 +11,23 @@ from app.models.domain import (
     TransactionStatus,
     EntityStatus,
 )
+from app.core.security import get_password_hash
 
 NUM_USERS = 10
 NUM_TRANSACTIONS = 100_000
-
 
 async def seed_data():
     async with AsyncSessionLocal() as session:
         print("🌱 Start seeding database...")
 
-        result = await session.execute(select(User))
-        if result.scalars().first():
-            print("⚠️  Data already exists! Skipping user creation.")
-            return
+        hashed_pin_1234 = get_password_hash("1234")
 
         print("👤 Creating Users...")
+        result = await session.execute(select(User))
+        if result.scalars().first():
+            print("⚠️  Data already exists! You might want to drop tables first.")
+            return
+
         users = []
         for i in range(NUM_USERS):
             user = User(
@@ -40,40 +42,45 @@ async def seed_data():
         user_result = await session.execute(select(User))
         db_users = user_result.scalars().all()
 
-        print("💳 Creating Accounts & Cards...")
+        print("💳 Creating Accounts & Cards (1-3 per user)...")
         cards = []
-        for user in db_users:
-            account = Account(
-                user_id=user.id,
-                iban=f"IR0000000000000000000000{user.id:02d}",
-                balance=100_000_000,
-                status=EntityStatus.ACTIVE.value,
-            )
-            session.add(account)
-            await session.flush()
 
-            card = Card(
-                user_id=user.id,
-                account_id=account.id,
-                card_number=f"603799119911{user.id:04d}",
-                cvv2="1234",
-                expire_month=12,
-                expire_year=1405,
-                status=EntityStatus.ACTIVE.value,
-                hashed_pin="hashed_pass",
-            )
-            cards.append(card)
+        for user in db_users:
+            num_cards = random.randint(1, 3)
+
+            for j in range(num_cards):
+                account = Account(
+                    user_id=user.id,
+                    iban=f"IR0000000000000000{user.id:02d}{j:02d}",
+                    balance=random.randint(10_000_000, 100_000_000),
+                    status=EntityStatus.ACTIVE.value,
+                )
+                session.add(account)
+                await session.flush()
+
+                card = Card(
+                    user_id=user.id,
+                    account_id=account.id,
+                    card_number=f"60379911{user.id:04d}{j:04d}",
+                    cvv2="1234",
+                    expire_month=12,
+                    expire_year=1405,
+                    status=EntityStatus.ACTIVE.value,
+                    hashed_pin=hashed_pin_1234,
+                )
+                cards.append(card)
 
         session.add_all(cards)
         await session.commit()
+        print(f"✅ Created {len(cards)} cards for {NUM_USERS} users.")
 
-        print(f"💸 Generating {NUM_TRANSACTIONS} Transactions (This may take a few seconds)...")
+        print(f"💸 Generating {NUM_TRANSACTIONS} Transactions...")
 
         card_result = await session.execute(select(Card))
         db_cards = card_result.scalars().all()
 
         transactions_batch = []
-        for _ in range(NUM_TRANSACTIONS):
+        for i in range(NUM_TRANSACTIONS):
             src = random.choice(db_cards)
             dst = random.choice(db_cards)
 
@@ -89,6 +96,7 @@ async def seed_data():
                 type=TransactionType.CARD_TO_CARD.value,
                 status=TransactionStatus.SUCCESS.value,
                 ref_number=str(random.randint(100000000000, 999999999999)),
+                created_at=None,
             )
             transactions_batch.append(tx)
 
@@ -102,8 +110,7 @@ async def seed_data():
             session.add_all(transactions_batch)
             await session.commit()
 
-        print("\n✅ Done! Database seeded successfully with 100k records.")
-
+        print("\n✅ Done! Database seeded successfully.")
 
 if __name__ == "__main__":
     try:

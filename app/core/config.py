@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     MAX_TRANSACTION_AMOUNT: int = 50_000_000
     TRANSACTION_FEE_PERCENTAGE: float = 0.10
     MAX_TRANSACTION_FEE: int = 100_000
+    API_KEY: str
 
     class Config:
         env_file = ".env"
