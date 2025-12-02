@@ -117,18 +117,28 @@ async def get_total_fees(
     query = select(func.sum(Transaction.fee_amount))
     filters = []
 
-    def parse_date(date_str: str):
-        if date_str and len(date_str) > 6 and date_str[-6] == ' ':
-            date_str = date_str[:-6] + '+' + date_str[-5:]
-        return datetime.fromisoformat(date_str)
+    def parse_date(date_str: str, field_name: str):
+        try:
+            if date_str and len(date_str) > 6 and date_str[-6] == " ":
+                date_str = date_str[:-6] + "+" + date_str[-5:]
+            return datetime.fromisoformat(date_str)
+        except ValueError:
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    f"Invalid date format for '{field_name}'. "
+                    "Please use standard ISO format (e.g. 2023-01-01 12:00:00)."
+                )
+            )
 
     if transaction_id:
         filters.append(Transaction.id == transaction_id)
 
     if start_date:
-        filters.append(Transaction.created_at >= parse_date(start_date))
+        filters.append(Transaction.created_at >= parse_date(start_date, "start_date"))
+
     if end_date:
-        filters.append(Transaction.created_at <= parse_date(end_date))
+        filters.append(Transaction.created_at <= parse_date(end_date, "end_date"))
 
     if filters:
         query = query.where(and_(*filters))

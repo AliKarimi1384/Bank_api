@@ -1,0 +1,116 @@
+{
+  "info": {
+    "_postman_id": "085f5867-96a6-4ca7-9a58-743a89281e54",
+    "name": "New Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "19040930"
+  },
+  "item": [
+    {
+      "name": "http://127.0.0.1:8000/get_data",
+      "id": "f109833e-8869-420d-a950-e2b530516817",
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "app",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "app_key",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://0.0.0.0:8000/get_app_version",
+          "protocol": "http",
+          "host": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "port": "8000",
+          "path": [
+            "get_app_version"
+          ]
+        },
+        "description": "getting all data"
+      },
+      "response": []
+    },
+    {
+      "name": "http://127.0.0.1:8000/admin/add_config?config_string=vless://3942ab94-7892-4184-8e55-78d40f141693@f.darkoxyzen.online:35005?encryption=none%26security=none%26type=tcp%26headerType=none%23k%7Cf\n",
+      "id": "fcb5b2c5-24fe-4d11-94b5-7502bcfcee41",
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "cae5b911ebb5d5036b2d2bbcc4f7b49c913f81912665941f098df643a410dbe4",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "admin_key",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/admin/add_config?config_string=vless://3942ab94-7892-4184-8e55-78d40f141693@f.darkoxyzen.online:35005?encryption=none%26security=none%26type=tcp%26headerType=none%23k%7Cf\n",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "admin",
+            "add_config"
+          ],
+          "query": [
+            {
+              "key": "config_string",
+              "value": "vless://3942ab94-7892-4184-8e55-78d40f141693@f.darkoxyzen.online:35005?encryption=none&security=none&type=tcp&headerType=none#k%7Cf\n"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "bank_api",
+      "id": "8db82502-da6a-44c0-b5de-ae7dc2612bfd",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/api/v1/cards/my-cards?user_id=2",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "cards",
+            "my-cards"
+          ],
+          "query": [
+            {
+              "key": "user_id",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

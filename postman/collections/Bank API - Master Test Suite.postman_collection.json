@@ -1,0 +1,896 @@
+{
+  "info": {
+    "_postman_id": "2d5545fe-9b6c-4840-9615-936c06848693",
+    "name": "Bank API - Master Test Suite",
+    "description": "Please initialize the variables.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Cards Management",
+      "item": [
+        {
+          "name": "Get User Cards - Multiple/Single Cards (Success)",
+          "id": "fbcda58b-3ea8-4fa2-8347-3210d73b0d52",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cards/my-cards?user_id={{valid_user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "my-cards"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "{{valid_user_id}}",
+                  "description": "User with cards"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User Cards - No Cards (Empty Array)",
+          "id": "e7d84225-5502-4e6b-a829-5965786b635b",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cards/my-cards?user_id={{user_id_no_cards}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "my-cards"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "{{user_id_no_cards}}",
+                  "description": "User ID with 0 cards"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User Cards - User Not Found (404)",
+          "id": "f7f03c15-b68c-43f9-9e70-af8ae1560475",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cards/my-cards?user_id=999999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "my-cards"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "999999"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "id": "f395b59a-5e13-46e1-bc6d-80a385deb688"
+    },
+    {
+      "name": "2. Withdraw Scenarios",
+      "item": [
+        {
+          "name": "Withdraw - Success (Normal Amount)",
+          "id": "1b1d97cc-3713-46ce-acab-a8ba5b0a7c54",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"card_number\": \"{{card_source}}\",\n    \"amount\": 50000,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/withdraw",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "withdraw"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Withdraw - Success (Min Limit 1000)",
+          "id": "2b67b9ed-a7ea-4123-99f2-3ce13d89b14b",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"card_number\": \"{{card_source}}\",\n    \"amount\": 1000,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/withdraw",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "withdraw"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Withdraw - Success (Max Limit 50M)",
+          "id": "b050ec57-92bd-4772-ad02-5c983e5b1bb4",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"card_number\": \"{{card_source}}\",\n    \"amount\": 50000000,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/withdraw",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "withdraw"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Withdraw - Error (Invalid Card Number/Luhn)",
+          "id": "7b2574cf-82c3-4fe0-8720-0540ef73c462",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"card_number\": \"1234\",\n    \"amount\": 2000,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/withdraw",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "withdraw"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Withdraw - Error (Card Not Found)",
+          "id": "955d9d45-9875-4469-8160-5673b275ed08",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"card_number\": \"6037991199999999\",\n    \"amount\": 2000,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/withdraw",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "withdraw"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Withdraw - Error (Insufficient Funds)",
+          "id": "930cefe5-0d7b-4c50-8569-fe3d17997321",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"card_number\": \"{{card_source}}\",\n    \"amount\": 9999999999,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/withdraw",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "withdraw"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Withdraw - Error (Below Min < 1000)",
+          "id": "dd741112-7249-4f0a-8761-f09b2e765fd7",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"card_number\": \"{{card_source}}\",\n    \"amount\": 500,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/withdraw",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "withdraw"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Withdraw - Error (Above Max > 50M)",
+          "id": "5229a3bd-dfe7-4210-a0a4-a8204dc79d4a",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"card_number\": \"{{card_source}}\",\n    \"amount\": 50000001,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/withdraw",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "withdraw"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Withdraw - Error (Bad Data Type)",
+          "id": "505bd786-d7e4-4df0-8d19-bbed7fd37cc8",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"card_number\": \"{{card_source}}\",\n    \"amount\": \"two thousand\",\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/withdraw",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "withdraw"
+              ]
+            }
+          }
+        }
+      ],
+      "id": "4ce595f0-4f5a-4e34-bba2-63232cf71f9f"
+    },
+    {
+      "name": "3. Transfer Scenarios",
+      "item": [
+        {
+          "name": "Transfer - Success (Fee < 100k)",
+          "id": "b402ef1e-cb0e-429a-8587-2993ab6c9fed",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"source_card_number\": \"{{card_source}}\",\n    \"dest_card_number\": \"{{card_dest}}\",\n    \"amount\": 50000,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/transfer",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "transfer"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Transfer - Success (Fee Capped at 100k)",
+          "id": "e120f38a-265e-4280-ba9a-7d7c5d7aa014",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"source_card_number\": \"{{card_source}}\",\n    \"dest_card_number\": \"{{card_dest}}\",\n    \"amount\": 2000000,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/transfer",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "transfer"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Transfer - Error (Source = Dest)",
+          "id": "49961431-847b-415b-a47a-82c3ac0fe86d",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"source_card_number\": \"{{card_source}}\",\n    \"dest_card_number\": \"{{card_source}}\",\n    \"amount\": 10000,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/transfer",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "transfer"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Transfer - Error (Dest Card Not Found)",
+          "id": "8ee3d1f0-7395-4ac1-b1f3-eee80ad1bb12",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"source_card_number\": \"{{card_source}}\",\n    \"dest_card_number\": \"6037991199999999\",\n    \"amount\": 10000,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/transfer",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "transfer"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Transfer - Error (Insufficient Funds + Fee)",
+          "id": "3afd1653-6cec-42c2-baec-77523e9ac600",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"source_card_number\": \"{{card_source}}\",\n    \"dest_card_number\": \"{{card_dest}}\",\n    \"amount\": 9999999999,\n    \"pin\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/transfer",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "transfer"
+              ]
+            }
+          }
+        }
+      ],
+      "id": "5e819aac-03ba-4920-a7bf-040be7dbc210"
+    },
+    {
+      "name": "4. Reports & History",
+      "item": [
+        {
+          "name": "History - Last 10 Transactions",
+          "id": "5d94d64f-53e0-4d41-b8f6-662225706083",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/history/{{card_source}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "history",
+                "{{card_source}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Fees Report - Total (No Filter)",
+          "id": "6ac0d2ec-6925-4e96-ac66-121bd7c59f4f",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/fees-report",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "fees-report"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Fees Report - Date Range (Valid)",
+          "id": "a18f696f-b422-4caa-91ab-5efa31f453f2",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/fees-report?start_date=2023-01-01 00:00:00&end_date=2025-12-30 23:59:59",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "fees-report"
+              ],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "2023-01-01 00:00:00"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2025-12-30 23:59:59"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Fees Report - By Transaction ID",
+          "id": "e9b3f301-ea0d-49df-96a8-d221d22f423f",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/fees-report?transaction_id=105",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "fees-report"
+              ],
+              "query": [
+                {
+                  "key": "transaction_id",
+                  "value": "105"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Fees Report - Invalid Date Format",
+          "id": "ec79c483-aff7-4e00-8072-df4cf4b2abb3",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/fees-report?start_date=invalid-date",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "fees-report"
+              ],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "invalid-date"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "id": "18b398af-f254-413b-90c8-f897e1058912"
+    },
+    {
+      "name": "5. Security & Edge Cases",
+      "item": [
+        {
+          "name": "Security - No API Key (401)",
+          "id": "9c327255-57c8-4204-8f2a-cf1520fd6640",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/cards/my-cards?user_id=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "my-cards"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Security - Invalid API Key (403)",
+          "id": "dcb93c72-8e52-43bb-8c3e-23ab9e8efa0f",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "wrong-key",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cards/my-cards?user_id=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "my-cards"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Security - Method Not Allowed (405)",
+          "id": "7a1b2ba9-08ea-4e3b-82e2-04a0b9558b56",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cards/my-cards",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "my-cards"
+              ]
+            }
+          }
+        }
+      ],
+      "id": "e56a7a5c-a705-4439-b6cf-73b32cd7b3a6"
+    }
+  ],
+  "variable": [
+    {
+      "id": "f24ccfbb-2997-4d5d-88fc-42097003f81d",
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "id": "e3266730-4dc5-4936-8a96-16b727a05403",
+      "key": "api_key",
+      "value": "bank-secret-key-123"
+    },
+    {
+      "id": "654c6474-42b4-4602-85ae-f27fe3c87208",
+      "key": "valid_user_id",
+      "value": "1"
+    },
+    {
+      "id": "944f3b07-0641-4937-883a-ccb4ae6f0219",
+      "key": "user_id_no_cards",
+      "value": "20"
+    },
+    {
+      "id": "2ed72810-5656-4cc5-a358-67e7c48ec5a2",
+      "key": "card_source",
+      "value": "REPLACE_WITH_REAL_CARD_A"
+    },
+    {
+      "id": "ba3e7819-28ed-4236-863a-7569cabb56a9",
+      "key": "card_dest",
+      "value": "REPLACE_WITH_REAL_CARD_B"
+    }
+  ]
+}
