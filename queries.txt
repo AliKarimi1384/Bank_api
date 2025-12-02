@@ -1,0 +1,55 @@
+Task queries
+
+1.
+
+SELECT 
+    DATE_TRUNC('hour', created_at) AS transaction_hour,
+    COUNT(*) AS transaction_count
+FROM 
+    transactions
+WHERE 
+    status = 1
+GROUP BY 
+    DATE_TRUNC('hour', created_at)
+ORDER BY 
+    transaction_hour DESC; 
+
+2.
+
+SELECT 
+    u.full_name,
+    TO_CHAR(t.created_at, 'YYYY-MM') AS transaction_month,
+    SUM(t.amount) AS total_amount,
+    COUNT(t.id) AS transaction_count
+FROM 
+    users u
+JOIN 
+    accounts a ON u.id = a.user_id
+JOIN 
+    cards c ON a.id = c.account_id
+JOIN 
+    transactions t ON c.id = t.source_card_id
+WHERE 
+    t.status = 1
+GROUP BY 
+    u.id, u.full_name, transaction_month
+ORDER BY 
+    u.full_name ASC,       
+    transaction_month DESC;
+
+3.
+
+SELECT 
+    c.card_number,
+    TO_CHAR(t.created_at, 'YYYY-MM') AS transaction_month,
+    SUM(t.amount) AS total_amount
+FROM 
+    cards c
+JOIN 
+    transactions t ON c.id = t.source_card_id
+WHERE 
+    t.status = 1
+GROUP BY 
+    c.card_number, transaction_month
+ORDER BY 
+    total_amount DESC;
